@@ -19,7 +19,6 @@
     height: 44px;
     line-height: 44px;
     text-align: center;
-    /* align-items: center; */
   }
 
   .left {

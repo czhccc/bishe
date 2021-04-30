@@ -1,7 +1,7 @@
 <template>
   <div class="shop-info">
     <div class="shop-top">
-      <img :src="shop.logo">
+      <img class="img" src="../../../assets/img/detail/222.jpg" alt="">
       <span class="title">{{shop.name}}</span>
     </div>
     <div class="shop-middle">
@@ -36,8 +36,13 @@
 </template>
 
 <script>
+  import { Image } from 'vant';
+
 	export default {
 		name: "DetailShopInfo",
+    components: {
+      [Image.name]: Image
+    },
     props: {
 		  shop: {
 		    type: Object,
@@ -68,7 +73,7 @@
     align-items: center;
   }
 
-  .shop-top img {
+  .shop-top .img {
     width: 45px;
     height: 45px;
     border-radius: 50%;

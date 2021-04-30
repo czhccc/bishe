@@ -2,7 +2,8 @@
     <div id="list">
       <div v-for="(item, index) in listData" :key="index" class="item" @click="navigate(item.routePath)">
         <span class="icon">
-          <img :src="item.icon" alt="">
+          <!-- <img :src="item.icon" alt=""> -->
+          <van-icon :name="item.icon" color="yellowgreen" />
         </span>
         <div class="info">{{item.info}}</div>
       </div>
@@ -10,8 +11,13 @@
 </template>
 
 <script>
+  import { Icon } from 'vant';
+
 	export default {
 		name: "ListView",
+    components: {
+      [Icon.name]: Icon,
+    },
     props: {
 		  listData: {
 		    type: Array,

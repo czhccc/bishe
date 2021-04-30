@@ -24,3 +24,7 @@ export function getHomeGoods(type, page) {
 export function toGetImages(data={}) {
   return request_GET('/shop/image', data)
 }
+
+export function toGetGoodsList(data={}) {
+  return request_GET('/shop/shopStreet', data)
+}

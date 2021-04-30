@@ -13,6 +13,8 @@
   import CartList from "./childComps/CartList";
   import CartBottomBar from "./childComps/CartBottomBar";
 
+  import { toSelectCart } from '../../network/cart'
+
   import {mapGetters} from 'vuex'
 
   export default {
@@ -22,7 +24,16 @@
       CartList,
       CartBottomBar
     },
+    data() {
+      return {
+        userPhone: '',
+      }
+    },
     created() {
+      
+
+      this.userPhone = this.$store.getters.getUserPhone
+
       let loginPhone = this.$store.getters.getUserPhone
       if (!loginPhone) {
         this.$router.replace('/login')
@@ -33,7 +44,18 @@
         length: 'cartLength'
       })
     },
-
+    activated() {
+      this.selectCart()
+    },
+    methods: {
+      selectCart() {
+        toSelectCart({
+          phone: this.userPhone
+        }).then(res => {
+          console.log(res)
+        })
+      }
+    }
 
   }
 </script>

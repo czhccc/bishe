@@ -1,10 +1,10 @@
 <template>
   <div class="goods-list-item" @click="itemClick">
-    <img v-lazy="showImage" alt="" @load="imageLoad">
+    <img v-lazy="goods.images[0].http" alt="" @load="imageLoad">
     <div class="goods-info">
       <p>{{goods.title}}</p>
-      <span class="price">{{goods.price}}</span>
-      <span class="collect">{{goods.cfav}}</span>
+      <span class="price">{{goods.amount}}</span>
+      <span class="collect">{{goods.collection}}</span>
     </div>
   </div>
 </template>
@@ -21,9 +21,7 @@
       }
     },
     computed: {
-      showImage() {
-        return this.goods.img || this.goods.image || this.goods.show.img
-      }
+
     },
     methods: {
       imageLoad() {
@@ -37,7 +35,7 @@
          // 需要先在 main.js 文件中定义事件总线
       },
       itemClick() {
-        this.$router.push('/detail/' + this.goods.iid)
+        this.$router.push('/detail/' + this.goods.id)
       }
     }
   }

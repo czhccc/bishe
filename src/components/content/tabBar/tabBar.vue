@@ -1,31 +1,11 @@
 <template>
   <div id="main-tab-bar">
     
-    <van-tabbar route v-model="active" active-color="#ff5777">
-      <van-tabbar-item replace to="/home" icon="home-o">
-        <span>首页</span>
-        <template #icon="props">
-          <img :src="props.active ? require('@/assets/img/tabbar/home_active.svg') : require('@/assets/img/tabbar/home.svg')" />
-        </template>
-      </van-tabbar-item>
-      <van-tabbar-item replace to="/category" icon="search">
-        <span>分类</span>
-        <template #icon="props">
-          <img :src="props.active ? require('@/assets/img/tabbar/category_active.svg') : require('@/assets/img/tabbar/category.svg')" />
-        </template>
-      </van-tabbar-item>
-      <van-tabbar-item replace to="/cart" icon="friends-o" :badge="cartCount">
-        <span>购物车</span>
-        <template #icon="props">
-          <img :src="props.active ? require('@/assets/img/tabbar/shopcart_active.svg') : require('@/assets/img/tabbar/shopcart.svg')" />
-        </template>
-      </van-tabbar-item>
-      <van-tabbar-item  replace to="/profile" icon="setting-o">
-        <span>我的</span>
-        <template #icon="props">
-          <img :src="props.active ? require('@/assets/img/tabbar/profile_active.svg') : require('@/assets/img/tabbar/profile.svg')" />
-        </template>
-      </van-tabbar-item>
+    <van-tabbar route v-model="active" active-color="yellowgreen" inactive-color="#000">
+      <van-tabbar-item replace to="/home" icon="wap-home-o">首页</van-tabbar-item>
+      <van-tabbar-item replace to="/category" icon="apps-o">分类</van-tabbar-item>
+      <van-tabbar-item replace to="/cart" icon="cart-o" :badge="cartCount">购物车</van-tabbar-item>
+      <van-tabbar-item replace to="/profile" icon="friends-o">我的</van-tabbar-item>
     </van-tabbar>
 
   </div>

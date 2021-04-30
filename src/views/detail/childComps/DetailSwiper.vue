@@ -3,7 +3,7 @@
 
     <van-swipe class="my-swipe" v-if="swiperImages.length" :autoplay="3000" indicator-color="white" :stop-propagation="false">
       <van-swipe-item v-for="(item, index) in swiperImages" :key="index">
-        <img class="img" v-lazy="item" alt="">
+        <img class="img" v-lazy="item.http" alt="">
       </van-swipe-item>
     </van-swipe>
     

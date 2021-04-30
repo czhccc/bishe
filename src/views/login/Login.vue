@@ -95,7 +95,7 @@
     margin: 0 auto;
     text-align: center;
     font-size: 40px;
-    color: pink;
+    color: yellowgreen;
     margin-top: 50px;
     margin-bottom: 30px;
   }
@@ -111,7 +111,7 @@
     justify-content: center;
   }
   .signInButton {
-    background: #FF8198;;
+    background: yellowgreen;
     border: none;
     width: 80%;
   }

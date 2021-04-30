@@ -1,10 +1,10 @@
 <template>
   <div class='CateGrid'>
     
-    <van-grid class="van-grid" :icon-size="50" center v-if="subcategories.list">
-      <div class="item" v-for="(item, index) in subcategories.list" :key="index">
-        <a :href="item.link">
-          <van-grid-item class="van-grid-item" :icon="item.image" :text="item.title" />
+    <van-grid class="van-grid" :icon-size="50" center v-if="subcategories">
+      <div class="item" v-for="(item, index) in subcategories" :key="index">
+        <a>
+          <van-grid-item class="van-grid-item" :icon="item.http" :text="item.name" />
         </a>
       </div>
     </van-grid>
@@ -23,7 +23,7 @@
     },
     props: {
       subcategories: {
-        type: Object,
+        type: Array,
         default() {
           return []
         }

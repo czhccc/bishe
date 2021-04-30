@@ -1,11 +1,12 @@
 <template>
   <div class="home-recommend">
-    <van-grid :border="false" icon-size="60" >
+    <!-- <van-grid :border="false" icon-size="60" >
       <van-grid-item v-for="(item, index) in recommend" :key="index" class="item"
                      :icon="item.image" 
                      :text="item.title" 
                      :url="item.link" />
-    </van-grid>
+    </van-grid> -->
+    <img class="img1" width="100%" :src="recommend" />
   </div>
 </template>
 
@@ -20,10 +21,8 @@
     },
     props: {
       recommend: {
-        type: Array,
-        default() {
-          return [];
-        }
+        type: String,
+        default: ""
       }
     }
   }

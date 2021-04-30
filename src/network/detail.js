@@ -1,4 +1,5 @@
 import {request} from "./network";
+import { request_POST, request_GET } from "./network";
 
 export function getDetail(iid) {
 	return request({
@@ -50,4 +51,11 @@ export function getRecommend() {
 	return request({
 		url: '/recommend'
 	})
+}
+
+
+
+
+export function toGetGoodsDetails(data={}) {
+	return request_GET('/shop/shop', data)
 }

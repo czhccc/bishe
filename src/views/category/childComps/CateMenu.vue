@@ -3,7 +3,7 @@
     
     <van-sidebar v-model="currentIndex" @change="onChange(currentIndex)">
       <div v-for="(item, index) in categories" :key="index">
-        <van-sidebar-item class="van-sidebar-item" :title="item.title" />
+        <van-sidebar-item class="van-sidebar-item" :title="item.name" />
       </div>
     </van-sidebar>
 

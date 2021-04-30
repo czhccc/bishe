@@ -42,7 +42,9 @@
 
   import Scroll from "components/common/scroll/Scroll";
 
-  import { getDetail, Goods, Shop, GoodsParam, getRecommend } from "network/detail";
+  import { toGetGoodsList } from "network/home";
+  import { toGetGoodsDetails } from "network/detail";
+  import { toAddIntoCart } from "network/cart";
 
   import { debounce } from "common/utils";
 
@@ -81,31 +83,86 @@
         currentIndex: 0, // 记录当前的模块的index
       }
     },
+    watch: {
+      '$route' (to, from) {
+        console.log('111')
+        toGetGoodsDetails({
+          id: to.path.charAt(to.path.length-1)
+        }).then(res => {
+          console.log(res)
+          let data = res.data.result
+          this.swiperImages = data.images
+          this.goods = {
+            title: data.title,
+            newPrice: `￥${data.amount}`,
+            oldPrice: `￥${data.amount+50}`,
+            discount: '限时特价',
+            sales: data.sales,
+            collection: data.collection,
+            service: '72小时内发货',
+          }
+          this.shop = data.shop
+          this.detailInfo = {
+            desc: data.title,
+            detailImage: data.images
+          },
+          this.paramInfo = {
+            sizes: data.forms,
+            info: data.data
+          },
+          this.commentInfo = data.evaluations[0]
+        })
+        this.$forceUpdate()
+        this.$refs.scroll.scrollTo(0, 0, 200)
+      }
+    },
     created() {
-      this._getGoodsData() // 获取商品的数据
-      this._getRecommendData() // 获取推荐商品的数据
-      this._getOffsetTops() // 获取总的offsetTop，用于顶部导航栏的跳转
+      this.getGoodsData()
+      this.getRecommendGoodsData()
+      this._getOffsetTops()
     },
     mounted() {
       this._refresh() // 图片加载完成后 better-scroll 刷新内容高度
     },
     methods: {
       ...mapActions(['addToCart']),
-      _getGoodsData() { // 获取数据
+      getGoodsData() { // 获取数据
         // 保存传入的iid
         this.iid = this.$route.params.iid
 
         // 根据 iid 请求商品数据
-        getDetail(this.iid).then(res => {
-          const data = res.result
-          this.swiperImages = data.itemInfo.topImages // 保存轮播图的图片
-          this.goods = new Goods(data.itemInfo, data.columns, data.shopInfo.services) // 保存商品信息
-          this.shop = new Shop(data.shopInfo) // 保存店铺信息
-          this.detailInfo = data.detailInfo // 保存商品的详情信息
-          this.paramInfo = new GoodsParam(data.itemParams.info, data.itemParams.rule) // 保存参数信息
-          if (data.rate.cRate !== 0) {
-            this.commentInfo = data.rate.list[0] // 保存评论信息
+        toGetGoodsDetails({
+          id: this.iid
+        }).then(res => {
+          console.log(res)
+          let data = res.data.result
+          this.swiperImages = data.images
+          this.goods = {
+            title: data.title,
+            newPrice: `￥${data.amount}`,
+            oldPrice: `￥${data.amount+50}`,
+            discount: '限时特价',
+            sales: data.sales,
+            collection: data.collection,
+            service: '72小时内发货',
           }
+          this.shop = data.shop
+          this.detailInfo = {
+            desc: data.title,
+            detailImage: data.images
+          },
+          this.paramInfo = {
+            sizes: data.forms,
+            info: data.data
+          },
+          this.commentInfo = data.evaluations[0]
+        })
+      },
+      getRecommendGoodsData() {
+        toGetGoodsList({
+          comId: this.iid
+        }).then(res => {
+          this.recommends = res.data.result
         })
       },
       _getRecommendData() { // 获取商品推荐的数据

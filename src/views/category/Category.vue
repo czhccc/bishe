@@ -8,9 +8,9 @@
       </Scroll>
 
       <Scroll class="scroll" ref="scroll">
-        <CateGrid :subcategories="showSubcategory" />
+        <CateGrid :subcategories="categoriesTypes" />
         <TabControl :tabControl="['流行', '新品', '销量']" @tabClick="tabClick" />
-        <CateGoodsList :goodsList="showCategoryDetail" />
+        <CateGoodsList :goodsList="categoriesGoods" />
       </Scroll>
     </div>
 
@@ -25,8 +25,8 @@
   import CateGrid from './childComps/CateGrid'
   import TabControl from 'components/content/tabControl/TabControl'
   import CateGoodsList from './childComps/CateGoodsList'
-  
-  import {getCategory, getSubcategory, getCategoryDetail} from "network/category";
+
+  import { toGetCategoryType, toGetCategoryTypeGoods } from "network/category";
 
   import {debounce} from "common/utils";
 
@@ -43,23 +43,14 @@
     data() {
       return {
         categories: [], // Menu的文字
-        categoryData: {}, // 分类的数据，这里需要注意数据结构
+        categoriesTypes: [],
+        categoriesGoods: [],
         currentIndex: -1, // Menu的当前下标
         currentType: '', // 当前tabControl的种类
       }
     },
-    computed: {
-      showSubcategory() {
-		    if (this.currentIndex === -1) return {}
-        return this.categoryData[this.currentIndex].subcategories
-      },
-      showCategoryDetail() {
-		    if (this.currentIndex === -1) return []
-		    return this.categoryData[this.currentIndex].categoryDetail[this.currentType]
-      }
-    },
     created() {
-      this._getCategory() // 请求分类数据
+      this.init()
     },
     mounted() {
       /* 图片加载完成后 better-scroll 刷新内容高度 */
@@ -71,9 +62,46 @@
       })
     },
     methods: {
+      init() {
+        toGetCategoryType({
+          id: 0
+        }).then(res => {
+          console.log(res)
+          this.categories = res.data.result
+
+          toGetCategoryType({
+            id: 1
+          }).then(res => {
+            console.log(res)
+            this.categoriesTypes = res.data.result
+
+            toGetCategoryTypeGoods({
+              typeId: '1',
+              cut: 'pop'
+            }).then(res => {
+              console.log(res)
+              this.categoriesGoods = res.data.result
+            })
+          })
+        })
+      },
       /* 事件监听 */
       selectItem(index) {
-        this._getSubcategories(index)
+        this.currentIndex = index
+        toGetCategoryType({
+          id: this.categories[this.currentIndex].id
+        }).then(res => {
+          console.log(res)
+          this.categoriesTypes = res.data.result
+
+          toGetCategoryTypeGoods({
+            typeId: this.categories[this.currentIndex].id,
+            cut: this.currentType
+          }).then(res => {
+            console.log(res)
+            this.categoriesGoods = res.data.result
+          })
+        })
       },
       tabClick(index) {
         switch (index) {
@@ -87,48 +115,13 @@
             this.currentType = 'sell'
             break;
         }
-      },
-
-      /* 网络请求 */
-      _getCategory() {
-		    getCategory().then(res => {
-		      // 获取分类数据
-		      this.categories = res.data.category.list
-          // 初始化每个类别的子数据
-          for (let i = 0; i < this.categories.length; i++) {
-            this.categoryData[i] = {
-              subcategories: {},
-              categoryDetail: {
-                'pop': [],
-                'new': [],
-                'sell': []
-              }
-            }
-          }
-          // 请求第一个分类的数据，初始化
-          this._getSubcategories(0)
-        })
-      },
-      _getSubcategories(index) {
-        this.currentIndex = index;
-		    const mailKey = this.categories[index].maitKey;
-        getSubcategory(mailKey).then(res => {
-          this.categoryData[index].subcategories = res.data
-          this.categoryData = {...this.categoryData}
-          this._getCategoryDetail('pop')
-          this._getCategoryDetail('new')
-          this._getCategoryDetail('sell')
-        })
-      },
-      _getCategoryDetail(type) {
-        this.currentType = type
-		    // 获取请求的miniWallkey
-        const miniWallkey = this.categories[this.currentIndex].miniWallkey;
-        // 发送请求,传入miniWallkey和type
-		    getCategoryDetail(miniWallkey, type).then(res => {
-		      // 将获取的数据保存下来
-		      this.categoryData[this.currentIndex].categoryDetail[type] = res
-          this.categoryData = {...this.categoryData}
+        console.log(this.categories)
+        toGetCategoryTypeGoods({
+          typeId: this.categories[this.currentIndex].id,
+          cut: this.currentType
+        }).then(res => {
+          console.log(res)
+          this.categoriesGoods = res.data.result
         })
       },
     },

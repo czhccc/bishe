@@ -30,7 +30,7 @@
   }
 
   .active {
-    background-color: #ff8198;
-    border-color: #ff8198;
+    background-color: yellowgreen;
+    border-color: yellowgreen;
   }
 </style>

@@ -1,14 +1,20 @@
 <template>
   <div class="home-feature">
-    <a href="https://act.mogujie.com/zzlx67">
-      <img src="~assets/img/home/recommend_bg.jpg" alt="">
+    <a href="">
+      <img :src="feature" alt="">
     </a>
   </div>
 </template>
 
 <script>
   export default {
-    name: "HomeFeature"
+    name: "HomeFeature",
+    props: {
+      feature: {
+        type: String,
+        default: ""
+      }
+    }
   }
 </script>
 

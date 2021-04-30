@@ -118,11 +118,11 @@
 
 <style scoped>
   .smsButton {
-    background: #FF8198;
+    background: yellowgreen;
     border: none;
   }
   .btn {
-    background: #FF8198;
+    background: yellowgreen;
     width: 80%;
     margin-left: 50%;
     transform: translateX(-50%);

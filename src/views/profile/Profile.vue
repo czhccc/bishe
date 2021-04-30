@@ -27,13 +27,13 @@
     data() {
       return {
         orderList: [
-          {icon: '#point', icon: require('../../assets/img/profile/shopping.svg'), info: '我的收藏', routePath: '/collection'},
-          {icon: '#point', icon: require('../../assets/img/profile/shopping.svg'), info: '我的订单', routePath: '/order'},
-          {icon: '#service', icon: require('../../assets/img/profile/cart.svg'), info: '我的购物车', routePath: '/cart'},
+          {icon: 'gem-o', info: '我的收藏', routePath: '/collection'},
+          {icon: 'balance-list-o', info: '我的订单', routePath: '/order'},
+          {icon: 'cart-o', info: '我的购物车', routePath: '/cart'},
         ],
         serviceList: [
-          {icon: '#service', icon: require('../../assets/img/profile/cart.svg'), info: '修改密码', routePath: '/forgetPassword'},
-          {icon: '#service', icon: require('../../assets/img/profile/cart.svg'), info: '退出登录', routePath: ''},
+          {icon: 'setting-o', info: '修改密码', routePath: '/forgetPassword'},
+          {icon: 'replay', info: '退出登录', routePath: ''},
         ],
         
       }

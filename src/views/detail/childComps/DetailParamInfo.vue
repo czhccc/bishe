@@ -1,20 +1,69 @@
 <template>
   <div class="param-info" v-if="Object.keys(paramInfo).length !== 0">
-    <table v-for="(table, index) in paramInfo.sizes"
-           class="info-size" :key="index">
-      <tr v-for="(tr, indey) in table" :key="indey">
-        <td v-for="(td, indez) in tr" :key="indez">{{td}}</td>
+    <table class="info-size" >
+      <tr>
+        <td>尺码</td>
+        <td v-for="(td, indez) in paramInfo.sizes.size" :key="indez">{{td}}</td>
+      </tr>
+      <tr>
+        <td>胸围</td>
+        <td v-for="(td, indez) in paramInfo.sizes.bust" :key="indez">{{td}}</td>
+      </tr>
+      <tr>
+        <td>腰围</td>
+        <td v-for="(td, indez) in paramInfo.sizes.waist" :key="indez">{{td}}</td>
+      </tr>
+      <tr>
+        <td>裤长</td>
+        <td v-for="(td, indez) in paramInfo.sizes.pants" :key="indez">{{td}}</td>
+      </tr>
+      <tr>
+        <td>肩宽</td>
+        <td v-for="(td, indez) in paramInfo.sizes.shoulder" :key="indez">{{td}}</td>
+      </tr>
+      <tr>
+        <td>衣长</td>
+        <td v-for="(td, indez) in paramInfo.sizes.garment" :key="indez">{{td}}</td>
       </tr>
     </table>
     <table class="info-param">
-      <tr v-for="(info, index) in paramInfo.infos">
-        <td class="info-param-key">{{info.key}}</td>
-        <td class="param-value">{{info.value}}</td>
+      <tr>
+        <td class="info-param-key">厚薄</td>
+        <td class="param-value">{{paramInfo.info.thickness}}</td>
+      </tr>
+      <tr>
+        <td class="info-param-key">厂名</td>
+        <td class="param-value">{{paramInfo.info.factory}}</td>
+      </tr>
+      <tr>
+        <td class="info-param-key">颜色</td>
+        <td class="param-value">{{paramInfo.info.color}}</td>
+      </tr>
+      <tr>
+        <td class="info-param-key">季节</td>
+        <td class="param-value">{{paramInfo.info.season}}</td>
+      </tr>
+      <tr>
+        <td class="info-param-key">厂址</td>
+        <td class="param-value">{{paramInfo.info.address}}</td>
+      </tr>
+      <tr>
+        <td class="info-param-key">材质</td>
+        <td class="param-value">{{paramInfo.info.material}}</td>
+      </tr>
+      <tr>
+        <td class="info-param-key">领型</td>
+        <td class="param-value">{{paramInfo.info.collar}}</td>
+      </tr>
+      <tr>
+        <td class="info-param-key">袖长</td>
+        <td class="param-value">{{paramInfo.info.sleeve}}</td>
+      </tr>
+      <tr>
+        <td class="info-param-key">风格</td>
+        <td class="param-value">{{paramInfo.info.style}}</td>
       </tr>
     </table>
-    <div class="info-img" v-if="paramInfo.image.length !== 0">
-      <img :src="paramInfo.image" alt="">
-    </div>
   </div>
 </template>
 
