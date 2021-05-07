@@ -13,19 +13,25 @@
     <div class="cart-list">
       <scroll class="content" ref="scroll">
         <!-- <div class="cart-list-item" v-for="(item, index) in goodsList" :key="index"> -->
-        <div class="address">
-          阿米娅 13989536936<br>
-          罗德岛罗德岛罗德岛罗德岛罗德岛罗德岛罗德岛罗德岛罗德岛罗德岛罗德岛罗德岛罗德岛罗德岛罗德岛
-        </div>  
-        <div class="cart-list-item" @click="cartItemClick">
-          <div>
-            <van-card price="2.00" title="啊还是福建烤老鼠的划分开卷还是的空间返回空" desc="描述信息描述信息描述信息描述信息描述信息描述信息描述信息" thumb="https://img01.yzcdn.cn/vant/ipad.jpeg" >
-              <template #footer>
-                <div class="good-number">×{{number}}</div>
-              </template>
-            </van-card>
+        <div v-for="(item, index) in list" :key="index">
+          <div class="address">
+            <div class="address-icon"><van-icon name="location-o" /></div>
+            <div class="address-content">
+              {{item.name}} {{item.phone}}<br>
+              {{item.address}}
+            </div>
+          </div>  
+          <div class="cart-list-item" >
+            <div>
+              <van-card price="2.00" :title="item.title" :desc="item.title" :thumb="item.http" >
+                <template #footer>
+                  <div class="good-number">×{{item.num}}</div>
+                </template>
+              </van-card>
+            </div>
           </div>
         </div>
+
       </scroll>
     </div>
 
@@ -38,13 +44,16 @@
 
   import Scroll from 'components/common/scroll/Scroll'
 
-  import { SubmitBar, Card, Checkbox, Button, Dialog, CheckboxGroup, Cell, CellGroup, Toast } from 'vant';
+  import { Icon, SubmitBar, Card, Checkbox, Button, Dialog, CheckboxGroup, Cell, CellGroup, Toast } from 'vant';
+
+  import { toGetOrderList } from '../../network/order'
 
   export default {
     name: 'Order',
     components: {
       NavBar,
       Scroll,
+      [Icon.name]: Icon,
       [SubmitBar.name]: SubmitBar,
       [Toast.name]: Toast,
       [Card.name]: Card,
@@ -54,6 +63,7 @@
     },
     data () {
       return {
+        list: [],
         number: 2
       };
     },
@@ -63,12 +73,17 @@
       //   this.$router.replace('/login')
       // }
     },
+    activated() {
+      toGetOrderList({
+        phone: '13989536936'
+      }).then(res => {
+        console.log(res)
+        this.list = res.data.result
+      })
+    },
     methods: {
       backClick() {
         this.$router.go(-1)
-      },
-      cartItemClick() {
-        console.log('aaa')
       },
     },
   }
@@ -103,6 +118,16 @@
     margin-top: 10px;
     width: 90%;
     font-size: 14px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .address-icon {
+
+  }
+
+  .address-content {
+    margin-left: 10px;
   }
 
   .van-card {

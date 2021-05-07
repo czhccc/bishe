@@ -12,6 +12,14 @@ export function toAddCartNumber(data={}) {
   return request_GET('/ShopCar/add', data)
 }
 
+export function toBuy(data={}) {
+  return request_GET('/ShopCar/buy', data)
+}
+
+export function toBuyRightNow(data={}) {
+  return request_GET('/ShopCar/buybuy', data)
+}
+
 export function toSubCartNumber(data={}) {
   return request_GET('/ShopCar/reduce', data)
 }

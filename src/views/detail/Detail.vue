@@ -42,6 +42,7 @@
           <van-card :price="goods.newPrice" :title="goods.title" :desc="goods.title" :thumb="swiperImages[0].http" ></van-card>
         </div>
         <van-stepper class="stepper" theme="round" v-model="goodNumber" />
+        <div class="goodAmount">￥{{totalGoodPrice}}</div>
         <div class="address">
           <div class="address-title">
             收货人：
@@ -50,7 +51,7 @@
           <div class="address-content">
             <div class="address-name">
               {{choose_address.name || defaultAddress.name}} {{choose_address.phone || defaultAddress.phone}}
-              <div class="defaultIcon" v-if="choose_address.isDefault">默认</div>
+              <div class="defaultIcon" v-if="isShowDefaultIcon">默认</div>
             </div>
             <div class="address-address">{{choose_address.address || defaultAddress.address}}</div>
           </div>
@@ -77,7 +78,7 @@
 
   import { toGetGoodsList } from "network/home";
   import { toGetGoodsDetails } from "network/detail";
-  import { toAddIntoCart } from "network/cart";
+  import { toAddIntoCart, toBuyRightNow } from "network/cart";
   import { toCheckCollectionStatus } from 'network/collection.js'
   import { toGetAddressList } from 'network/address.js'
 
@@ -133,6 +134,22 @@
         themeTopYs: [], // 每一个模块对应的Y值
         getThemeTopYs: null, // 防抖的对应模块跳转函数
         currentIndex: 0, // 记录当前的模块的index
+      }
+    },
+    computed: {
+      totalGoodPrice() {
+        return this.goodNumber * this.goods.newPrice
+      },
+      isShowDefaultIcon() {
+        if (this.choose_address.id) {
+          if (this.choose_address.isDefault == true) {
+            return true
+          } else {
+            return false
+          }
+        } else if (this.defaultAddress.status == '1') {
+          return true
+        }
       }
     },
     watch: {
@@ -316,20 +333,24 @@
             this.$router.push('/login')
           } else if (res.data.code == '200') {
             Toast('已成功加入购物车');
+          } else {
+            Toast('加入购物车失败');
           }
         })
       },
       buyConfirm() {
-        toAddIntoCart({
+        toBuyRightNow({
           phone: '13989536936',
           comId: this.iid,
-          num: this.goodNumber
+          num: this.goodNumber,
+          amount: this.totalGoodPrice,
+          address: this.choose_address.id || this.defaultAddress.id
         }).then(res => {
           console.log(res)
           if(res.data.code=='200') {
-            Toast('加入购物车成功');
+            Toast('购买成功');
           } else {
-            Toast('加入购物车失败');
+            Toast('购买失败');
           }
         }) 
       },
@@ -384,6 +405,13 @@
     bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
+  }
+
+  .goodAmount {
+    text-align: right;
+    margin-top: 10px;
+    margin-right: 35px;
+    color: black;
   }
 
   .address-content {
