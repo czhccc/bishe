@@ -7,3 +7,15 @@ export function toSelectCart(data={}) {
 export function toAddIntoCart(data={}) {
   return request_GET('/ShopCar/insert', data)
 }
+
+export function toAddCartNumber(data={}) {
+  return request_GET('/ShopCar/add', data)
+}
+
+export function toSubCartNumber(data={}) {
+  return request_GET('/ShopCar/reduce', data)
+}
+
+export function toRemoveCartGood(data={}) {
+  return request_GET('/ShopCar/remove', data)
+}

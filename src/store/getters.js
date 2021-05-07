@@ -12,6 +12,10 @@ const getters = {
 	},
 	getUserAmount(state) {
 		return state.user_amount
+	},
+
+	getChooseAddress(state) {
+		return state.choose_address
 	}
 }
 

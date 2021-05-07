@@ -29,13 +29,13 @@
     </div>
     
     <section class="account">
-      <div class="account-item">
+      <!-- <div class="account-item">
         <div class="number">
           <span class="balance">{{loginAmount}}</span>元
         </div>
         <div class="account-info">我的余额</div>
       </div>
-      <!-- <div class="account-item">
+      <div class="account-item">
         <div class="number">
           <span class="balance">0</span>个
         </div>
@@ -75,9 +75,6 @@
         loginPhone: "",
         loginAmount: 0,
       }
-    },
-    computed: {
-
     },
     methods: {
       toLogin() {

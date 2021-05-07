@@ -13,11 +13,7 @@
 
 <script>
   import { Tabbar, TabbarItem } from 'vant';
-
-  import {mapGetters} from 'vuex'
-
-  import {cartLength} from 'vuex'
-
+  
   export default {
     name: "MainTabBar",
     components: {

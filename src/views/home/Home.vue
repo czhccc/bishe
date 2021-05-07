@@ -11,8 +11,6 @@
       <home-swiper :banners="banners" @swiperImageLoad="swiperImageLoad"/>
       <!-- 推荐 -->
       <home-recommend :recommend="image1" />
-      <!-- <img class="img1" width="100%" :src="image1" /> -->
-      <!-- <img class="img1" width="100%" :src="image2" /> -->
       <!-- 本周流行图片 -->
       <home-feature :feature="image2" />
       <!-- tabControl -->

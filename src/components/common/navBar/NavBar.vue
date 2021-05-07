@@ -23,6 +23,11 @@
 
   .left {
     width: 60px;
+    line-height: 44px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    left: 20px;
   }
 
   .right {

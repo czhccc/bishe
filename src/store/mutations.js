@@ -21,6 +21,9 @@ const mutations = {
 		state.user_amount = user_amount
 	},
 
+	[types.CHOOSE_ADDRESS](state, choose_address) {
+		state.choose_address = choose_address
+	}
 
 }
 

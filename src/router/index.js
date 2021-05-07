@@ -9,6 +9,7 @@ const Detail = () => import('../views/detail/Detail')
 const Order = () => import('../views/order/Order')
 const Collection = () => import('../views/collection/Collection')
 const Cart = () => import('../views/cart/Cart' )
+const Address = () => import('../views/address/Address' )
 const Profile= () => import('../views/profile/Profile')
 
 // 2.通过Vue.use(插件)，安装插件
@@ -64,6 +65,10 @@ const routes = [ // 将路由定义抽出
   {
     path: '/collection',
     component: Collection,
+  },
+  {
+    path: '/address',
+    component: Address,
   },
   {
     path: '/profile',

@@ -52,8 +52,8 @@
     },
     data () {
       return {
-        account: '',
-        password: '',
+        account: '13989536936',
+        password: '123456',
         showPassword1: true,
       };
     },
@@ -61,7 +61,7 @@
       toLogin() {
         login({
           phone: this.account,
-          password: this.password
+          password: this.password,
         }).then(res => {
           console.log(res)
           if (res.data.code == '200') {

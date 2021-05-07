@@ -12,6 +12,7 @@ const state = {
   cartList: [],
   user_phone: "",
   user_amount: 0,
+  choose_address: {},
 }
 
 const store = new Vuex.Store({

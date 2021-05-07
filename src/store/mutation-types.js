@@ -4,3 +4,5 @@ export const OUT_FROM_COUNT = 'out_from_count'
 
 export const USER_PHONE = 'user_phone'
 export const USER_AMOUNT = 'user_amount'
+
+export const CHOOSE_ADDRESS = 'choose_address'

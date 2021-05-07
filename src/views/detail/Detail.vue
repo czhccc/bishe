@@ -24,7 +24,40 @@
     <back-top class="back-top" @click.native="backTop" v-show="isShowBackTop" />
 
     <!-- 购物车栏 -->
-    <detail-bottom-bar @addCart="addGoodsToCart" />
+    <detail-bottom-bar :iid="iid" :isCollected="isCollected" @addCart="addGoodsToCart" @buy="buy" />
+
+    <van-popup v-model="addCartPopupShow" position="bottom" :style="{ height: '50%' }" v-if="swiperImages[0]" @close="addCartPopupClose" >
+      <div class="popup-content">
+        <div>
+          <van-card :price="goods.newPrice" :title="goods.title" :desc="goods.title" :thumb="swiperImages[0].http" ></van-card>
+        </div>
+        <van-stepper class="stepper" theme="round" v-model="goodNumber" />
+        <van-button class="popup-btn" round type="info" @click="addCartConfirm">加入购物车</van-button>
+      </div>
+    </van-popup>
+
+    <van-popup v-model="buyPopupShow" position="bottom" :style="{ height: '50%' }" v-if="swiperImages[0]" @close="buyPopupClose" >
+      <div class="popup-content">
+        <div>
+          <van-card :price="goods.newPrice" :title="goods.title" :desc="goods.title" :thumb="swiperImages[0].http" ></van-card>
+        </div>
+        <van-stepper class="stepper" theme="round" v-model="goodNumber" />
+        <div class="address">
+          <div class="address-title">
+            收货人：
+            <van-button class="" round size="mini" type="info" @click="chooseOtherAddress">选择其他地址</van-button>
+          </div>
+          <div class="address-content">
+            <div class="address-name">
+              {{choose_address.name || defaultAddress.name}} {{choose_address.phone || defaultAddress.phone}}
+              <div class="defaultIcon" v-if="choose_address.isDefault">默认</div>
+            </div>
+            <div class="address-address">{{choose_address.address || defaultAddress.address}}</div>
+          </div>
+        </div>
+        <van-button class="popup-btn" round type="info" @click="buyConfirm">立即购买</van-button>
+      </div>
+    </van-popup>
 
   </div>
 </template>
@@ -45,10 +78,16 @@
   import { toGetGoodsList } from "network/home";
   import { toGetGoodsDetails } from "network/detail";
   import { toAddIntoCart } from "network/cart";
+  import { toCheckCollectionStatus } from 'network/collection.js'
+  import { toGetAddressList } from 'network/address.js'
 
   import { debounce } from "common/utils";
 
   import { backTopMixin } from 'common/mixin'
+
+  import { Toast, Popup, Card, Stepper, Button } from 'vant';
+
+  import * as types from '../../store/mutation-types'
 
   import { mapActions } from 'vuex'
 
@@ -64,7 +103,12 @@
       DetailParamInfo,
       DetailCommentInfo,
       GoodsList,
-      DetailBottomBar
+      DetailBottomBar,
+      [Button.name]: Button,
+      [Toast.name]: Toast,
+      [Popup.name]: Popup,
+      [Card.name]: Card,
+      [Stepper.name]: Stepper,
     },
     mixins: [backTopMixin], // 回到顶部按钮
     data() {
@@ -77,6 +121,14 @@
         paramInfo: {}, // 参数的信息
         commentInfo: {}, // 评论的信息
         recommends: [], // 推荐商品的信息
+        goodNumber: 1,
+
+        isCollected: false,
+
+        buyPopupShow: false,
+        addCartPopupShow: false,
+        defaultAddress: {},
+        choose_address: {},
 
         themeTopYs: [], // 每一个模块对应的Y值
         getThemeTopYs: null, // 防抖的对应模块跳转函数
@@ -85,17 +137,22 @@
     },
     watch: {
       '$route' (to, from) {
-        console.log('111')
+        console.log(from)
+        console.log(to.path)
+        if(to.path == "/address") {
+          return ;
+        }
+        console.log(to.path.charAt(to.path.length-1))
         toGetGoodsDetails({
           id: to.path.charAt(to.path.length-1)
         }).then(res => {
           console.log(res)
           let data = res.data.result
-          this.swiperImages = data.images
+          this.swiperImages = data.images || []
           this.goods = {
             title: data.title,
-            newPrice: `￥${data.amount}`,
-            oldPrice: `￥${data.amount+50}`,
+            newPrice: `${data.amount}`,
+            oldPrice: `${data.amount+50}`,
             discount: '限时特价',
             sales: data.sales,
             collection: data.collection,
@@ -116,16 +173,47 @@
         this.$refs.scroll.scrollTo(0, 0, 200)
       }
     },
+    beforeRouteEnter (to, from, next) {
+      console.log(from)
+      if(from.path == "/address") {
+        console.log('789')
+        next(vm => {
+          console.log('456')
+          console.log(vm)
+          vm.buyPopupShow = true
+          vm.choose_address = vm.$store.getters.getChooseAddress
+          console.log('this.choose_address', vm.choose_address)
+        })
+      }
+      next()
+    },
     created() {
+      console.log('created')
       this.getGoodsData()
       this.getRecommendGoodsData()
       this._getOffsetTops()
+      toCheckCollectionStatus({
+        phone: '13989536936',
+        comId: this.iid
+      }).then(res => {
+        console.log(res)
+        this.isCollected = res.data.isCol
+      })
+      toGetAddressList({
+        phone: '13989536936',
+        status: '1'
+      }).then(res => {
+        console.log(res)
+        this.defaultAddress = res.data.result[0]
+      })
     },
     mounted() {
       this._refresh() // 图片加载完成后 better-scroll 刷新内容高度
     },
+    activated() {
+      
+    },
     methods: {
-      ...mapActions(['addToCart']),
       getGoodsData() { // 获取数据
         // 保存传入的iid
         this.iid = this.$route.params.iid
@@ -139,8 +227,8 @@
           this.swiperImages = data.images
           this.goods = {
             title: data.title,
-            newPrice: `￥${data.amount}`,
-            oldPrice: `￥${data.amount+50}`,
+            newPrice: `${data.amount}`,
+            oldPrice: `${data.amount+50}`,
             discount: '限时特价',
             sales: data.sales,
             collection: data.collection,
@@ -208,16 +296,50 @@
         this.showBackTop(position) // 是否显示 backTop 按钮
       },
       addGoodsToCart() { // 接收ButtomBar加入购物车按钮发出的事件，将商品添加到购物车
-        const product = {}
-        product.image = this.swiperImages[0];
-        product.title = this.goods.title;
-        product.desc = this.goods.desc;
-        product.price = this.goods.realPrice;
-        product.iid = this.iid;
-
-        // 映射action后，直接调用action中的addToCart方法，将商品加入购物车
-        this.addToCart(product)
-      }
+        this.addCartPopupShow = true
+      },
+      buy() {
+        console.log('aaa')
+        this.buyPopupShow = true
+      },
+      chooseOtherAddress() {
+        this.$router.push('/address')
+      },
+      addCartConfirm() {
+        toAddIntoCart({
+          phone: '13989536936',
+          comId: this.iid,
+          num: this.goodNumber
+        }).then(res => {
+          console.log(res)
+          if (res.data.code == '403') {
+            this.$router.push('/login')
+          } else if (res.data.code == '200') {
+            Toast('已成功加入购物车');
+          }
+        })
+      },
+      buyConfirm() {
+        toAddIntoCart({
+          phone: '13989536936',
+          comId: this.iid,
+          num: this.goodNumber
+        }).then(res => {
+          console.log(res)
+          if(res.data.code=='200') {
+            Toast('加入购物车成功');
+          } else {
+            Toast('加入购物车失败');
+          }
+        }) 
+      },
+      addCartPopupClose() {
+        this.goodNumber = 1
+      },
+      buyPopupClose() {
+        this.goodNumber = 1
+        this.$store.commit(types.CHOOSE_ADDRESS, {})
+      },
     }
   }
 </script>
@@ -244,6 +366,51 @@
 
   .back-top {
     margin-bottom: 15px;
+  }
+
+  .popup-content {
+    height: 100%;
+  }
+
+  .stepper {
+    text-align: right;
+    margin-top: 5px;
+    margin-right: 5px;
+  }
+
+  .popup-btn {
+    width: 90%;
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .address-content {
+    padding: 5px 10px;
+  }
+
+  .address-name {
+    display: flex;
+    align-items: center;
+    color: black;
+    font-size: 14px;
+  }
+
+  .defaultIcon {
+    background-color: red;
+    display: inline-block;
+    width: 30px;
+    margin-left: 10px;
+    text-align: center;
+    border-radius: 20px;
+    font-size: 12px;
+    color: white;
+  }
+
+  .address-address {
+    color: black;
+    font-size: 14px;
   }
 
 </style>
