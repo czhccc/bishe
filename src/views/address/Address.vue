@@ -50,7 +50,7 @@
     data () {
       return {
         toSwitch: false,
-        chosenAddressId: '1',
+        chosenAddressId: '0',
         showDeleteBtn: true,
         list: [
           {
@@ -80,6 +80,7 @@
       this.toEdit = false
       this.showDeleteBtn = false
       this.toSwitch = false
+      this.chosenAddressId = '0'
     },
     beforeRouteEnter (to, from, next) {
       if(from.path.slice(1, 7) == 'detail' || from.path.slice(1, 5) == 'cart') {
@@ -120,12 +121,19 @@
         this.mode = 'add'
       },
       onEdit(item, index) {
+        console.log(item)
+        let tempObj = {
+          id: item.id,
+          name: item.name,
+          tel: item.tel,
+          addressDetail: item.address,
+          isDefault: item.isDefault
+        }
+        this.editItem = tempObj
         this.showDeleteBtn = true
         this.toEdit = !this.toEdit
-        this.editItem = item
         this.mode = 'edit'
         this.currentAddressId = item.id
-        console.log(item, index)
       },
       onSelect(item, index) {
         this.$store.commit(types.CHOOSE_ADDRESS, item)

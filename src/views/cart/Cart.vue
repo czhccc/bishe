@@ -4,6 +4,20 @@
       <template v-slot:center>购物车({{goodsNumber || 0}})</template>
     </nav-bar>
 
+    <div class="address">
+      <div class="address-content" @click="chooseOtherAddress">
+        <div class="address-icon"><van-icon name="location-o" /></div>
+        <div class="address-main">
+          <div class="address-name">
+            {{choose_address.name || defaultAddress.name}} {{choose_address.phone || defaultAddress.phone}}
+            <div class="defaultIcon" v-if="isShowDefaultIcon">默认</div>
+          </div>
+          <div class="address-address">{{choose_address.address || defaultAddress.address}}</div>
+        </div>
+        <div class="address-icon"><van-icon name="arrow" /></div>
+      </div>
+    </div>
+
     <div class="cart-list">
       <scroll class="content" ref="scroll">
         <div class="cart-list-item" v-for="(item, index) in list" :key="index">
@@ -34,24 +48,12 @@
       </van-submit-bar>
     </div>
 
-    <van-popup v-model="buyPopupShow" position="bottom" :style="{ height: '50%' }" @close="buyPopupClose">
+    <!-- <van-popup v-model="buyPopupShow" position="bottom" :style="{ height: '80%' }" @close="buyPopupClose">
       <div class="popup-content">
-        <div class="address">
-          <div class="address-title">
-            选择收货人：
-            <van-button class="" round size="mini" type="info" @click="chooseOtherAddress">选择其他地址</van-button>
-          </div>
-          <div class="address-content">
-            <div class="address-name">
-              {{choose_address.name || defaultAddress.name}} {{choose_address.phone || defaultAddress.phone}}
-              <div class="defaultIcon" v-if="isShowDefaultIcon">默认</div>
-            </div>
-            <div class="address-address">{{choose_address.address || defaultAddress.address}}</div>
-          </div>
-        </div>
+        
         <van-button class="popup-btn" round type="info" @click="buyConfirm">提交订单</van-button>
       </div>
-    </van-popup>
+    </van-popup> -->
 
   </div>
 </template>
@@ -61,7 +63,7 @@
 
   import Scroll from 'components/common/scroll/Scroll'
 
-  import { SubmitBar, Card, Checkbox, Button, Dialog, Popup, CheckboxGroup, Cell, CellGroup, Toast } from 'vant';
+  import { SubmitBar, Card, Checkbox, Button, Dialog, Popup, Toast, Icon } from 'vant';
 
   import { toSelectCart, toAddCartNumber, toSubCartNumber, toRemoveCartGood, toBuy } from '../../network/cart'
   import { toGetAddressList } from 'network/address.js'
@@ -80,6 +82,7 @@
       [Button.name]: Button,
       [Dialog.name]: Dialog,
       [Popup.name]: Popup,
+      [Icon.name]: Icon,
     },
     data() {
       return {
@@ -87,7 +90,7 @@
         goodsNumber: 0,
         list: [],
         isLoading: false,
-        buyPopupShow: false,
+        // buyPopupShow: false,
         choose_address: {},
         defaultAddress: {},
       }
@@ -169,7 +172,7 @@
       if(from.path == "/address") {
         next(vm => {
           console.log(vm)
-          vm.buyPopupShow = true
+          // vm.buyPopupShow = true
           vm.choose_address = vm.$store.getters.getChooseAddress
           console.log('this.choose_address', vm.choose_address)
         })
@@ -206,13 +209,7 @@
       },
       // 点击 购买订单 按钮
       onSubmit() {
-        this.buyPopupShow = true
-        // toBuy({
-        //   phone: '13989536936'
-        //   // id: 
-        // }).then(res => {
-        //   console.log(res)
-        // })
+        // this.buyPopupShow = true
       },
       subClick(item) {
         if(item.num <= 1) {
@@ -251,7 +248,13 @@
         this.$router.push('/address')
       },
       buyConfirm() {
-
+        this.goodNumber = 1
+        // toBuy({
+        //   phone: '13989536936'
+        //   // id: 
+        // }).then(res => {
+        //   console.log(res)
+        // })
       },
       buyPopupClose() {
         this.goodNumber = 1
@@ -414,8 +417,15 @@
     color: black;
   }
 
+  .address {
+    border-bottom: 1px solid black;
+  }
+
   .address-content {
     padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 
   .address-name {
@@ -436,8 +446,17 @@
     color: white;
   }
 
+  .address-main {
+    text-align: left;
+    width: 85%;
+  }
+
   .address-address {
+    width: 100%;
     color: black;
     font-size: 14px;
+    word-break: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 </style>

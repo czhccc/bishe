@@ -26,7 +26,7 @@
     <!-- 购物车栏 -->
     <detail-bottom-bar :iid="iid" :isCollected="isCollected" @addCart="addGoodsToCart" @buy="buy" />
 
-    <van-popup v-model="addCartPopupShow" position="bottom" :style="{ height: '50%' }" v-if="swiperImages[0]" @close="addCartPopupClose" >
+    <van-popup v-model="addCartPopupShow" position="bottom" :style="{ height: '80%' }" v-if="swiperImages[0]" @close="addCartPopupClose" >
       <div class="popup-content">
         <div>
           <van-card :price="goods.newPrice" :title="goods.title" :desc="goods.title" :thumb="swiperImages[0].http" ></van-card>
@@ -36,25 +36,36 @@
       </div>
     </van-popup>
 
-    <van-popup v-model="buyPopupShow" position="bottom" :style="{ height: '50%' }" v-if="swiperImages[0]" @close="buyPopupClose" >
+    <van-popup v-model="buyPopupShow" position="bottom" :style="{ height: '80%' }" v-if="swiperImages[0]" @close="buyPopupClose" >
       <div class="popup-content">
         <div>
           <van-card :price="goods.newPrice" :title="goods.title" :desc="goods.title" :thumb="swiperImages[0].http" ></van-card>
         </div>
-        <van-stepper class="stepper" theme="round" v-model="goodNumber" />
-        <div class="goodAmount">￥{{totalGoodPrice}}</div>
-        <div class="address">
-          <div class="address-title">
-            收货人：
-            <van-button class="" round size="mini" type="info" @click="chooseOtherAddress">选择其他地址</van-button>
+        
+        <div class="items">
+          <div class="address">
+            <div class="address-title">收货人：</div>
+            <div class="address-content" @click="chooseOtherAddress">
+              <div class="address-icon"><van-icon name="location-o" /></div>
+              <div class="address-main">
+                <div class="address-name">
+                  {{choose_address.name || defaultAddress.name}} {{choose_address.phone || defaultAddress.phone}}
+                  <div class="defaultIcon" v-if="isShowDefaultIcon">默认</div>
+                </div>
+                <div class="address-address">{{choose_address.address || defaultAddress.address}}</div>
+              </div>
+            <div class="address-icon"><van-icon name="arrow" /></div>
           </div>
-          <div class="address-content">
-            <div class="address-name">
-              {{choose_address.name || defaultAddress.name}} {{choose_address.phone || defaultAddress.phone}}
-              <div class="defaultIcon" v-if="isShowDefaultIcon">默认</div>
+
+          <div class="amount">
+            <div class="amount-title">购买数量：</div>
+            <div class="amount-content">
+              <van-stepper class="stepper" theme="round" v-model="goodNumber" />
+              <div class="goodAmount">￥{{totalGoodPrice}}</div>
             </div>
-            <div class="address-address">{{choose_address.address || defaultAddress.address}}</div>
           </div>
+        </div>
+        
         </div>
         <van-button class="popup-btn" round type="info" @click="buyConfirm">立即购买</van-button>
       </div>
@@ -86,7 +97,7 @@
 
   import { backTopMixin } from 'common/mixin'
 
-  import { Toast, Popup, Card, Stepper, Button } from 'vant';
+  import { Toast, Popup, Card, Stepper, Button, Icon } from 'vant';
 
   import * as types from '../../store/mutation-types'
 
@@ -110,6 +121,7 @@
       [Popup.name]: Popup,
       [Card.name]: Card,
       [Stepper.name]: Stepper,
+      [Icon.name]: Icon,
     },
     mixins: [backTopMixin], // 回到顶部按钮
     data() {
@@ -381,7 +393,7 @@
         this.goodNumber = 1
       },
       buyPopupClose() {
-        // this.goodNumber = 1
+        this.goodNumber = 1
         this.$store.commit(types.CHOOSE_ADDRESS, {})
       },
     }
@@ -416,10 +428,23 @@
     height: 100%;
   }
 
+  .items {
+    padding: 10px;
+  }
+
+  .amount {
+    margin-top: 10px;
+  }
+
+  .amount-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
   .stepper {
-    text-align: right;
+    margin-left: 10px;
     margin-top: 5px;
-    margin-right: 5px;
   }
 
   .popup-btn {
@@ -439,6 +464,9 @@
 
   .address-content {
     padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 
   .address-name {
@@ -459,9 +487,18 @@
     color: white;
   }
 
+  .address-main {
+    text-align: left;
+    width: 85%;
+  }
+
   .address-address {
+    width: 100%;
     color: black;
     font-size: 14px;
+    word-break: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
 </style>
