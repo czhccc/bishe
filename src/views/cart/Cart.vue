@@ -22,14 +22,16 @@
       <scroll class="content" ref="scroll">
         <div class="cart-list-item" v-for="(item, index) in list" :key="index">
           <van-checkbox v-model="item.check">复选框</van-checkbox>
-          <div>
+          <div class="cart-list-item-content">
             <van-card :price="item.goodData.amount" :title="item.goodData.title" :desc="item.goodData.title" :thumb="item.goodData.images[0].http" >
               <template #footer>
-                <div class="good-number">
-                  <van-button class="number-button" size="mini" @click="subClick(item.goodData)">-</van-button>
-                  <div class="number">{{item.goodData.num}}</div>
-                  <van-button class="number-button" size="mini" @click="addClick(item.goodData)">+</van-button>
-                </div>
+                  <van-stepper class="stepper" 
+                               theme="round" 
+                               v-model="item.goodData.num" 
+                               disable-input
+                               :min="0"
+                               @plus="addClick(item.goodData)" 
+                               @minus="subClick(item.goodData)" />
               </template>
             </van-card>
           </div>
@@ -48,13 +50,6 @@
       </van-submit-bar>
     </div>
 
-    <!-- <van-popup v-model="buyPopupShow" position="bottom" :style="{ height: '80%' }" @close="buyPopupClose">
-      <div class="popup-content">
-        
-        <van-button class="popup-btn" round type="info" @click="buyConfirm">提交订单</van-button>
-      </div>
-    </van-popup> -->
-
   </div>
 </template>
 
@@ -63,7 +58,7 @@
 
   import Scroll from 'components/common/scroll/Scroll'
 
-  import { SubmitBar, Card, Checkbox, Button, Dialog, Popup, Toast, Icon } from 'vant';
+  import { SubmitBar, Card, Checkbox, Button, Dialog, Popup, Toast, Icon, Stepper } from 'vant';
 
   import { toSelectCart, toAddCartNumber, toSubCartNumber, toRemoveCartGood, toBuy } from '../../network/cart'
   import { toGetAddressList } from 'network/address.js'
@@ -83,6 +78,7 @@
       [Dialog.name]: Dialog,
       [Popup.name]: Popup,
       [Icon.name]: Icon,
+      [Stepper.name]: Stepper,
     },
     data() {
       return {
@@ -90,7 +86,6 @@
         goodsNumber: 0,
         list: [],
         isLoading: false,
-        // buyPopupShow: false,
         choose_address: {},
         defaultAddress: {},
       }
@@ -119,15 +114,8 @@
         }
         return tempPrice
       },
-      // 是否全部选中
       isSelectAll: { 
         get() {
-          // for (const i of this.list) {
-          //   if(i.check == false) {
-          //     return false
-          //   }
-          // }
-          // return true
           if(this.list.length === 0) { // 如果购物车中没有商品，则返回 false
             this.isDisable = true
             return false
@@ -172,7 +160,6 @@
       if(from.path == "/address") {
         next(vm => {
           console.log(vm)
-          // vm.buyPopupShow = true
           vm.choose_address = vm.$store.getters.getChooseAddress
           console.log('this.choose_address', vm.choose_address)
         })
@@ -207,9 +194,32 @@
       checkClick() {
         this.goodsList.checked = !this.goodsData.checked
       },
-      // 点击 购买订单 按钮
       onSubmit() {
-        // this.buyPopupShow = true
+        this.isLoading = true
+        let tempId = ''
+        for (const i of this.list) {
+          if(i.check == true) {
+            if(tempId == '') {
+              tempId = i.goodData.id
+            } else {
+              tempId = tempId + `,${i.goodData.id}`
+            }
+          }
+        }
+        toBuy({
+          phone: '13989536936',
+          id: tempId,
+          amount: 0,
+          address: this.choose_address.id || this.defaultAddress.id,
+        }).then(res => {
+          console.log(res)
+          if(res.data.code == '200') {
+            Toast('购买成功')
+            this.isLoading = false
+            this.goodNumber = 1
+            this.selectCart()
+          }
+        })
       },
       subClick(item) {
         if(item.num <= 1) {
@@ -220,10 +230,15 @@
               phone: '13989536936',
               id: item.id
             }).then(res => {
-              console.log(res)
-              this.selectCart()
+              if(res.data.code == '200') {
+                Toast('删除成功')
+                this.selectCart()
+              } else {
+                Toast('失败')
+              }
             })
           }).catch(err => {
+            this.selectCart()
             console.log(err)
           })
         } else {
@@ -231,7 +246,11 @@
             phone: '13989536936',
             id: item.id
           }).then(res => {
-            this.selectCart()
+            if(res.data.code == '200') {
+              this.selectCart()
+            } else {
+              Toast('失败')
+            }
           })
         }
       },
@@ -240,28 +259,21 @@
           phone: '13989536936',
           id: item.id
         }).then(res => {
-          console.log(res)
-          this.selectCart()
+          if(res.data.code == '200') {
+            this.selectCart()
+          } else {
+            Toast('失败')
+          }
         })
       },
       chooseOtherAddress() {
         this.$router.push('/address')
-      },
-      buyConfirm() {
-        this.goodNumber = 1
-        // toBuy({
-        //   phone: '13989536936'
-        //   // id: 
-        // }).then(res => {
-        //   console.log(res)
-        // })
       },
       buyPopupClose() {
         this.goodNumber = 1
         this.$store.commit(types.CHOOSE_ADDRESS, {})
       },
     }
-
   }
 </script>
 
@@ -286,7 +298,8 @@
   }
 
   .cart-list {
-    height: calc(100% - 44px - 49px - 44px);
+    height: calc(100% - 44px - 42px - 100px);
+    
   }
 
   .content {
@@ -302,28 +315,16 @@
     border-bottom: 1px solid #ccc;
   }
 
+  .cart-list-item-content {
+    width: 100%;
+  }
+
   .van-checkbox {
     margin-left: 10px;
   }
 
   .van-card {
     background-color: white;
-  }
-
-  .van-card__title {
-    width: 200px;
-  }
-
-  .van-card__desc {
-    width: 200px;
-    color: #A9A9A9;
-    text-overflow : ellipsis;
-    white-space: nowrap;
-  }
-
-  .van-card__footer {
-    display: flex;
-    justify-content: flex-end;
   }
 
   .good-number {
@@ -333,88 +334,6 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-  }
-
-  .number {
-    width: 30px;
-    font-size: 20px;
-    text-align: center;
-  }
-
-  .number-button {
-    width: 40px;
-    margin: 0;
-    font-size: 20px;
-    border: none;
-    background-color: rgb(246,247,247);
-  }
-
-  .item-title, .item-desc {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-
-  .item-img {
-    padding: 5px;
-  }
-
-  .item-img img {
-    width: 80px;
-    height: 100px;
-    display: block;
-    border-radius: 5px;
-  }
-
-  .item-info {
-    font-size: 17px;
-    color: #333;
-    padding: 5px 10px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .item-info .item-desc {
-    font-size: 14px;
-    color: #666;
-    margin-top: 15px;
-  }
-
-  .info-bottom {
-    margin-top: 10px;
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-    right: 10px;
-  }
-
-  .info-bottom .item-price {
-    color: orangered;
-  }
-
-  .popup-content {
-    height: 100%;
-  }
-
-  .stepper {
-    text-align: right;
-    margin-top: 5px;
-    margin-right: 5px;
-  }
-
-  .popup-btn {
-    width: 90%;
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
-  .goodAmount {
-    text-align: right;
-    margin-top: 10px;
-    margin-right: 35px;
-    color: black;
   }
 
   .address {
@@ -458,5 +377,11 @@
     word-break: normal;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  .stepper {
+    position: absolute;
+    bottom: 0px;
+    right: 10px;
   }
 </style>

@@ -52,21 +52,7 @@
         toSwitch: false,
         chosenAddressId: '0',
         showDeleteBtn: true,
-        list: [
-          {
-            id: '1',
-            name: '张三',
-            tel: '13000000000',
-            address: '浙江省杭州市西湖区文三路 138 号东方通信大厦 7 楼 501 室',
-            isDefault: true,
-          },
-          {
-            id: '2',
-            name: '李四',
-            tel: '1310000000',
-            address: '浙江省杭州市拱墅区莫干山路 50 号',
-          },
-        ],
+        list: [],
         toEdit: false,
         editItem: {},
         mode: 'add',
@@ -84,7 +70,6 @@
     },
     beforeRouteEnter (to, from, next) {
       if(from.path.slice(1, 7) == 'detail' || from.path.slice(1, 5) == 'cart') {
-        // this.toSwitch = true
         next(vm => {
           vm.toSwitch = true
         })
@@ -137,6 +122,7 @@
       },
       onSelect(item, index) {
         this.$store.commit(types.CHOOSE_ADDRESS, item)
+        this.$router.go(-1)
       },
       onSave(content) {
         console.log(content)

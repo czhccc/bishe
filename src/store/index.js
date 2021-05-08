@@ -9,9 +9,7 @@ Vue.use(Vuex)
 
 // 创建state对象
 const state = {
-  cartList: [],
   user_phone: "",
-  user_amount: 0,
   choose_address: {},
 }
 

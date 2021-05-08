@@ -31,7 +31,13 @@
         <div>
           <van-card :price="goods.newPrice" :title="goods.title" :desc="goods.title" :thumb="swiperImages[0].http" ></van-card>
         </div>
-        <van-stepper class="stepper" theme="round" v-model="goodNumber" />
+        <div class="amount">
+          <div class="amount-title">购买数量：</div>
+          <div class="amount-content">
+            <van-stepper class="stepper" theme="round" v-model="goodNumber" />
+            <div class="goodAmount">￥{{totalGoodPrice}}</div>
+          </div>
+        </div>
         <van-button class="popup-btn" round type="info" @click="addCartConfirm">加入购物车</van-button>
       </div>
     </van-popup>
@@ -100,8 +106,6 @@
   import { Toast, Popup, Card, Stepper, Button, Icon } from 'vant';
 
   import * as types from '../../store/mutation-types'
-
-  import { mapActions } from 'vuex'
 
   export default {
     name: "Detail",
@@ -199,27 +203,6 @@
             },
             this.commentInfo = data.evaluations[0]
           }
-          // let data = res.data.result
-          // this.swiperImages = data.images || []
-          // this.goods = {
-          //   title: data.title,
-          //   newPrice: `${data.amount}`,
-          //   oldPrice: `${data.amount+50}`,
-          //   discount: '限时特价',
-          //   sales: data.sales,
-          //   collection: data.collection,
-          //   service: '72小时内发货',
-          // }
-          // this.shop = data.shop
-          // this.detailInfo = {
-          //   desc: data.title,
-          //   detailImage: data.images
-          // },
-          // this.paramInfo = {
-          //   sizes: data.forms,
-          //   info: data.data
-          // },
-          // this.commentInfo = data.evaluations[0]
         })
         this.$forceUpdate()
         this.$refs.scroll.scrollTo(0, 0, 200)
@@ -240,7 +223,6 @@
       next()
     },
     created() {
-      console.log('created')
       this.getGoodsData()
       this.getRecommendGoodsData()
       this._getOffsetTops()
@@ -248,33 +230,30 @@
         phone: '13989536936',
         comId: this.iid
       }).then(res => {
-        console.log(res)
         this.isCollected = res.data.isCol
       })
       toGetAddressList({
         phone: '13989536936',
         status: '1'
       }).then(res => {
-        console.log(res)
-        this.defaultAddress = res.data.result[0]
+        if(res.data.code=='200') {
+          this.defaultAddress = res.data.result[0]
+        } else {
+          Toast('出错了')
+        }
       })
     },
     mounted() {
       this._refresh() // 图片加载完成后 better-scroll 刷新内容高度
     },
-    activated() {
-      
-    },
     methods: {
       getGoodsData() { // 获取数据
         // 保存传入的iid
         this.iid = this.$route.params.iid
-
         // 根据 iid 请求商品数据
         toGetGoodsDetails({
           id: this.iid
         }).then(res => {
-          console.log(res)
           let data = res.data.result
           this.swiperImages = data.images
           this.goods = {
@@ -303,11 +282,6 @@
           comId: this.iid
         }).then(res => {
           this.recommends = res.data.result
-        })
-      },
-      _getRecommendData() { // 获取商品推荐的数据
-        getRecommend().then(res => {
-          this.recommends = res.data.list
         })
       },
       _getOffsetTops() { // 获取总的offsetTop，用于顶部导航栏的跳转
@@ -344,7 +318,6 @@
             this.$refs.navBar.currentIndex = this.currentIndex
           }
         }
-
         this.showBackTop(position) // 是否显示 backTop 按钮
       },
       addGoodsToCart() { // 接收ButtomBar加入购物车按钮发出的事件，将商品添加到购物车
@@ -405,7 +378,6 @@
     position: relative;
     z-index: 9;
     background-color: #fff;
-
     height: 100vh;
     padding-bottom: 60px;
   }

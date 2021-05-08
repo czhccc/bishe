@@ -20,9 +20,6 @@
         }
       }
     },
-    computed: {
-
-    },
     methods: {
       imageLoad() {
         // GoodsListItem 组件 与 Home 组件 之间的层级嵌套不方便进行交互
@@ -32,7 +29,7 @@
         } else {
           this.$bus.$emit('detailItemImageLoad')
         }
-         // 需要先在 main.js 文件中定义事件总线
+        // 需要先在 main.js 文件中定义事件总线
       },
       itemClick() {
         this.$router.push('/detail/' + this.goods.id)
@@ -45,7 +42,6 @@
   .goods-list-item {
     padding-bottom: 40px;
     position: relative;
-
     width: 48%;
   }
 

@@ -1,7 +1,7 @@
 <template>
   <div class="profile">
 
-    <nav-bar class="profile-nav-bar"><template v-slot:center>我的信息</template></nav-bar>
+    <nav-bar class="profile-nav-bar"><template v-slot:center>我的</template></nav-bar>
     <ProfileTop />
     <ProfileList :list-data="orderList" class="order-list" />
     <ProfileList :list-data="serviceList" class="service-list" />

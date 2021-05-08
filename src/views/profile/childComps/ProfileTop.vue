@@ -1,9 +1,6 @@
 <template>
   <div class='profileTop'>
     <div class="middle">
-      <!-- <div class="avatar">
-        <img src="~/assets/img/profile/avatar.svg" alt="">
-      </div> -->
       <div v-if="loginPhone.length > 0">
         <div class="login">
           <span>欢迎您</span>
@@ -22,32 +19,10 @@
           <span>暂无绑定手机号</span>
         </div>
       </div>
-      
       <div class="arrow">
         <van-icon name="arrow" />
       </div>
     </div>
-    
-    <section class="account">
-      <!-- <div class="account-item">
-        <div class="number">
-          <span class="balance">{{loginAmount}}</span>元
-        </div>
-        <div class="account-info">我的余额</div>
-      </div>
-      <div class="account-item">
-        <div class="number">
-          <span class="balance">0</span>个
-        </div>
-        <div class="account-info">我的优惠</div>
-      </div>
-      <div class="account-item">
-        <div class="number">
-          <span class="balance">0</span>分
-        </div>
-        <div class="account-info">我的积分</div>
-      </div> -->
-    </section>
 
   </div>
 </template>
@@ -60,16 +35,6 @@
     components: {
       [Icon.name]: Icon
     },
-    // props: {
-    //   loginPhone: {
-    //     type: String,
-    //     default: ""
-    //   },
-    //   loginAmount: {
-    //     type: Number,
-    //     default: 0.00
-    //   }
-    // },
     data () {
       return {
         loginPhone: "",
@@ -83,9 +48,6 @@
     },
     activated() {
       this.loginPhone = this.$store.getters.getUserPhone
-      this.loginAmount = this.$store.getters.getUserAmount
-      console.log(this.loginPhone)
-      console.log(this.loginAmount)
     },
   }
 </script>
@@ -100,13 +62,6 @@
   .avatar {
     position: relative;
   }
-  /* .avatar img {
-    width: 70px;
-    height: 70px;
-    position: absolute;
-    left: 20px;
-    top: 10px;
-  } */
   .login span {
     position: absolute;
     margin-left: 50px;
@@ -129,31 +84,5 @@
     position: absolute;
     margin-left: 330px;
     margin-top: 36px;
-  }
-
-  .account {
-    display: flex;
-  }
-  .account-item {
-    width: 100%;
-    background-color: #fff;
-    margin-right: 1px;
-    text-align: center;
-  }
-  .account-item:last-of-type {
-    margin-right: 0;
-  }
-  .account-item {
-    color: #666;
-    font-size: 13px;
-    padding: 18px;
-  }
-  .account-item .balance {
-    font-size: 24px;
-    font-weight: 700;
-    color: #ff5f3e;
-  }
-  .account-info {
-    margin-top: 6px;
   }
 </style>

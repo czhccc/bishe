@@ -18,7 +18,6 @@
 </template>
 
 <script>
-
   import NavBar from 'components/common/navBar/NavBar'
   import Scroll from 'components/common/scroll/Scroll'
   import CateMenu from './childComps/CateMenu'
@@ -45,7 +44,7 @@
         categories: [], // Menu的文字
         categoriesTypes: [],
         categoriesGoods: [],
-        currentIndex: -1, // Menu的当前下标
+        currentIndex: 0, // Menu的当前下标
         currentType: '', // 当前tabControl的种类
       }
     },
@@ -68,13 +67,11 @@
         }).then(res => {
           console.log(res)
           this.categories = res.data.result
-
           toGetCategoryType({
             id: 1
           }).then(res => {
             console.log(res)
             this.categoriesTypes = res.data.result
-
             toGetCategoryTypeGoods({
               typeId: '1',
               cut: 'pop'
@@ -85,7 +82,6 @@
           })
         })
       },
-      /* 事件监听 */
       selectItem(index) {
         this.currentIndex = index
         toGetCategoryType({
@@ -93,7 +89,6 @@
         }).then(res => {
           console.log(res)
           this.categoriesTypes = res.data.result
-
           toGetCategoryTypeGoods({
             typeId: this.categories[this.currentIndex].id,
             cut: this.currentType
@@ -115,7 +110,6 @@
             this.currentType = 'sell'
             break;
         }
-        console.log(this.categories)
         toGetCategoryTypeGoods({
           typeId: this.categories[this.currentIndex].id,
           cut: this.currentType
@@ -150,7 +144,6 @@
     right: 0;
     top: 44px;
     bottom: 49px;
-
     display: flex;
   }
 

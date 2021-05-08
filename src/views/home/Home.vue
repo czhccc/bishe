@@ -17,7 +17,7 @@
       <tab-control :tabControl="tabControl" @tabClick="tabClick" ref="tabControl2"/>
       <!-- 商品列表 -->
       <goods-list :goodsDate="goodsList" />
-
+      
     </scroll>
 
     <!-- 回到顶部 -->

@@ -90,6 +90,10 @@
 </script>
 
 <style scoped>
+  .order {
+    height: 100vh;
+  }
+
   .nav-bar {
     background-color: var(--color-tint);
     color: #fff;
@@ -97,7 +101,8 @@
   }
 
   .cart-list {
-    height: calc(100% - 44px - 49px - 44px);
+    height: calc(100% - 44px - 50px);
+    padding-top: 10px;
   }
 
   .content {
@@ -107,7 +112,6 @@
 
   .cart-list-item {
     width: 100%;
-    /* display: flex; */
     font-size: 0;
     padding: 5px;
     border-bottom: 1px solid #ccc;
@@ -122,10 +126,6 @@
     align-items: center;
   }
   
-  .address-icon {
-
-  }
-
   .address-content {
     margin-left: 10px;
   }

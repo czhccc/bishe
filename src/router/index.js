@@ -82,8 +82,5 @@ const router = new VueRouter({
   mode: 'history' // 改变路径的方式为H5的history模式，默认为URL的hash模式
 })
 
-
-
-
 // 5.导出
 export default router

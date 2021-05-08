@@ -2,7 +2,6 @@
     <div id="list">
       <div v-for="(item, index) in listData" :key="index" class="item" @click="navigate(item.routePath)">
         <span class="icon">
-          <!-- <img :src="item.icon" alt=""> -->
           <van-icon :name="item.icon" color="yellowgreen" />
         </span>
         <div class="info">{{item.info}}</div>
@@ -51,11 +50,7 @@
     height: 44px;
     line-height: 44px;
     position: relative;
-  }
-
-  .icon img {
-    width: 18px;
-    height: 18px;
+    border-bottom: 1px solid rgba(100, 100, 100, .1);
   }
 
   .item .icon {
@@ -67,7 +62,6 @@
 
   .item .info {
     margin-left: 40px;
-    border-bottom: 1px solid rgba(100, 100, 100, .1);
     padding-left: 5px;
   }
 

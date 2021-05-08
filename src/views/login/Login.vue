@@ -67,7 +67,6 @@
           if (res.data.code == '200') {
             Notify({ type: 'danger', message: '登陆成功' });
             this.$store.commit(types.USER_PHONE, res.data.personInfo.phone)
-            this.$store.commit(types.USER_AMOUNT, res.data.personInfo.amount)
             setTimeout(() => {
               this.$router.push('/home')
             }, 1000)
