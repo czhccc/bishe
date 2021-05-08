@@ -164,27 +164,50 @@
           id: to.path.charAt(to.path.length-1)
         }).then(res => {
           console.log(res)
-          let data = res.data.result
-          this.swiperImages = data.images || []
-          this.goods = {
-            title: data.title,
-            newPrice: `${data.amount}`,
-            oldPrice: `${data.amount+50}`,
-            discount: '限时特价',
-            sales: data.sales,
-            collection: data.collection,
-            service: '72小时内发货',
+          if (res.data.result) {
+            let data = res.data.result
+            this.swiperImages = data.images || []
+            this.goods = {
+              title: data.title,
+              newPrice: `${data.amount}`,
+              oldPrice: `${data.amount+50}`,
+              discount: '限时特价',
+              sales: data.sales,
+              collection: data.collection,
+              service: '72小时内发货',
+            }
+            this.shop = data.shop
+            this.detailInfo = {
+              desc: data.title,
+              detailImage: data.images
+            },
+            this.paramInfo = {
+              sizes: data.forms,
+              info: data.data
+            },
+            this.commentInfo = data.evaluations[0]
           }
-          this.shop = data.shop
-          this.detailInfo = {
-            desc: data.title,
-            detailImage: data.images
-          },
-          this.paramInfo = {
-            sizes: data.forms,
-            info: data.data
-          },
-          this.commentInfo = data.evaluations[0]
+          // let data = res.data.result
+          // this.swiperImages = data.images || []
+          // this.goods = {
+          //   title: data.title,
+          //   newPrice: `${data.amount}`,
+          //   oldPrice: `${data.amount+50}`,
+          //   discount: '限时特价',
+          //   sales: data.sales,
+          //   collection: data.collection,
+          //   service: '72小时内发货',
+          // }
+          // this.shop = data.shop
+          // this.detailInfo = {
+          //   desc: data.title,
+          //   detailImage: data.images
+          // },
+          // this.paramInfo = {
+          //   sizes: data.forms,
+          //   info: data.data
+          // },
+          // this.commentInfo = data.evaluations[0]
         })
         this.$forceUpdate()
         this.$refs.scroll.scrollTo(0, 0, 200)
@@ -358,7 +381,7 @@
         this.goodNumber = 1
       },
       buyPopupClose() {
-        this.goodNumber = 1
+        // this.goodNumber = 1
         this.$store.commit(types.CHOOSE_ADDRESS, {})
       },
     }

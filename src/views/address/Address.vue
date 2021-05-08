@@ -82,8 +82,7 @@
       this.toSwitch = false
     },
     beforeRouteEnter (to, from, next) {
-      console.log(from.path.slice(1, 7) == 'detail')
-      if(from.path.slice(1, 7) == 'detail') {
+      if(from.path.slice(1, 7) == 'detail' || from.path.slice(1, 5) == 'cart') {
         // this.toSwitch = true
         next(vm => {
           vm.toSwitch = true
