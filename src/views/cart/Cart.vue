@@ -4,7 +4,7 @@
       <template v-slot:center>购物车({{goodsNumber || 0}})</template>
     </nav-bar>
 
-    <div class="address">
+    <div class="address" v-if="defaultAddress">
       <div class="address-content" @click="chooseOtherAddress">
         <div class="address-icon"><van-icon name="location-o" /></div>
         <div class="address-main">
@@ -91,17 +91,29 @@
       }
     },
     created() {
-      this.userPhone = this.$store.getters.getUserPhone
-      // if (!this.userPhone) {
-      //   this.$router.replace('/login')
-      // }
+      
+    },
+    activated () {
+      console.log('cart actived')
+      let loginPhone = this.$store.getters.getUserPhone
+      console.log(loginPhone)
+      if (!loginPhone) {
+        this.$router.push('/login')
+      }
       toGetAddressList({
-        phone: '13989536936',
+        phone: this.$store.getters.getUserPhone,
         status: '1'
       }).then(res => {
         console.log(res)
-        this.defaultAddress = res.data.result[0]
+        if (res.data.code == '403') {
+          this.$router.push('/login')
+        } else if(res.data.result) {
+          this.defaultAddress = res.data.result[0]
+        }
       })
+
+      this.selectCart()
+      this.$refs.scroll.refresh() // 进入时重新刷新better-scroll，否则bette-scroll不知道添加了新数据
     },
     computed: {
       // 计算总价格
@@ -156,7 +168,6 @@
       }
     },
     beforeRouteEnter (to, from, next) {
-      console.log(from)
       if(from.path == "/address") {
         next(vm => {
           console.log(vm)
@@ -166,15 +177,10 @@
       }
       next()
     },
-    activated() {
-      this.selectCart()
-      this.$refs.scroll.refresh() // 进入时重新刷新better-scroll，否则bette-scroll不知道添加了新数据
-    },
     methods: {
       selectCart() {
         toSelectCart({
-          // phone: this.userPhone
-          phone: '13989536936'
+          phone: this.$store.getters.getUserPhone
         }).then(res => {
           console.log(res)
           if(res.data.result) {
@@ -207,7 +213,7 @@
           }
         }
         toBuy({
-          phone: '13989536936',
+          phone: this.$store.getters.getUserPhone,
           id: tempId,
           amount: 0,
           address: this.choose_address.id || this.defaultAddress.id,
@@ -227,7 +233,7 @@
             title: '确认删除商品？',
           }).then(() => {
             toRemoveCartGood({
-              phone: '13989536936',
+              phone: this.$store.getters.getUserPhone,
               id: item.id
             }).then(res => {
               if(res.data.code == '200') {
@@ -243,7 +249,7 @@
           })
         } else {
           toSubCartNumber({
-            phone: '13989536936',
+            phone: this.$store.getters.getUserPhone,
             id: item.id
           }).then(res => {
             if(res.data.code == '200') {
@@ -256,7 +262,7 @@
       },
       addClick(item) {
         toAddCartNumber({
-          phone: '13989536936',
+          phone: this.$store.getters.getUserPhone,
           id: item.id
         }).then(res => {
           if(res.data.code == '200') {

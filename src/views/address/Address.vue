@@ -60,6 +60,10 @@
       };
     },
     activated () {
+      let loginPhone = this.$store.getters.getUserPhone
+      if (!loginPhone) {
+        this.$router.push('/login')
+      }
       this.getAddressList()
     },
     deactivated() {
@@ -79,9 +83,12 @@
     methods: {
       getAddressList() {
         toGetAddressList({
-          phone: '13989536936'
+          phone: this.$store.getters.getUserPhone
         }).then(res => {
           console.log(res)
+          if(res.data.code == '403') {
+            return ;
+          }
           let tempArr = []
           for (const i of res.data.result) {
             let tempObj = {
@@ -129,7 +136,7 @@
         this.toEdit = !this.toEdit
         if(this.mode == 'add') {
           toAddAddress({
-            phone: '13989536936',
+            phone: this.$store.getters.getUserPhone,
             name: content.name,
             address: content.addressDetail,
             getPhone: content.tel
@@ -140,7 +147,7 @@
         } else {
           toUpdateAddress({
             id: this.currentAddressId,
-            phone: '13989536936',
+            phone: this.$store.getters.getUserPhone,
             name: content.name,
             address: content.addressDetail,
             getPhone: content.tel,
@@ -153,7 +160,7 @@
       },
       onDelete(content) {
         toDeleteAddress({
-          phone: '13989536936',
+          phone: this.$store.getters.getUserPhone,
           id: this.currentAddressId
         }).then(res => {
           console.log(res)

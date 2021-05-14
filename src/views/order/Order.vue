@@ -68,17 +68,22 @@
       };
     },
     created() {
-      // let loginPhone = this.$store.getters.getUserPhone
-      // if (!loginPhone) {
-      //   this.$router.replace('/login')
-      // }
+      
     },
     activated() {
+      let loginPhone = this.$store.getters.getUserPhone
+      if (!loginPhone) {
+        this.$router.push('/login')
+      }
       toGetOrderList({
-        phone: '13989536936'
+        phone: this.$store.getters.getUserPhone
       }).then(res => {
         console.log(res)
-        this.list = res.data.result
+        if(res.data.code == '403') {
+          this.$router.push('/login')
+        } else if (res.data.code == '200') {
+          this.list = res.data.result
+        }
       })
     },
     methods: {

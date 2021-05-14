@@ -180,7 +180,7 @@
           id: to.path.charAt(to.path.length-1)
         }).then(res => {
           console.log(res)
-          if (res.data.result) {
+          if (res.data.result.length != '0') {
             let data = res.data.result
             this.swiperImages = data.images || []
             this.goods = {
@@ -209,15 +209,12 @@
       }
     },
     beforeRouteEnter (to, from, next) {
-      console.log(from)
+      // console.log(from)
       if(from.path == "/address") {
-        console.log('789')
         next(vm => {
-          console.log('456')
           console.log(vm)
           vm.buyPopupShow = true
           vm.choose_address = vm.$store.getters.getChooseAddress
-          console.log('this.choose_address', vm.choose_address)
         })
       }
       next()
@@ -227,19 +224,18 @@
       this.getRecommendGoodsData()
       this._getOffsetTops()
       toCheckCollectionStatus({
-        phone: '13989536936',
+        phone: this.$store.getters.getUserPhone,
         comId: this.iid
       }).then(res => {
         this.isCollected = res.data.isCol
       })
       toGetAddressList({
-        phone: '13989536936',
+        phone: this.$store.getters.getUserPhone,
         status: '1'
       }).then(res => {
+        console.log(res)
         if(res.data.code=='200') {
           this.defaultAddress = res.data.result[0]
-        } else {
-          Toast('出错了')
         }
       })
     },
@@ -321,18 +317,27 @@
         this.showBackTop(position) // 是否显示 backTop 按钮
       },
       addGoodsToCart() { // 接收ButtomBar加入购物车按钮发出的事件，将商品添加到购物车
-        this.addCartPopupShow = true
+        let userPhone = this.$store.getters.getUserPhone
+        if (userPhone == '') {
+          this.$router.push('/login')
+        } else {
+          this.addCartPopupShow = true
+        }
       },
       buy() {
-        console.log('aaa')
-        this.buyPopupShow = true
+        let userPhone = this.$store.getters.getUserPhone
+        if (userPhone == '') {
+          this.$router.push('/login')
+        } else {
+          this.buyPopupShow = true
+        }
       },
       chooseOtherAddress() {
         this.$router.push('/address')
       },
       addCartConfirm() {
         toAddIntoCart({
-          phone: '13989536936',
+          phone: this.$store.getters.getUserPhone,
           comId: this.iid,
           num: this.goodNumber
         }).then(res => {
@@ -348,7 +353,7 @@
       },
       buyConfirm() {
         toBuyRightNow({
-          phone: '13989536936',
+          phone: this.$store.getters.getUserPhone,
           comId: this.iid,
           num: this.goodNumber,
           amount: this.totalGoodPrice,

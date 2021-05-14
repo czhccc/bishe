@@ -4,7 +4,7 @@ export function request_POST(url, options={}) {
   return new Promise((resolve, reject) => {
     axios({
       method: 'POST',
-      url: 'http://49.234.93.13:8555'+url,
+      url: 'http://localhost:8555'+url,
       data: options,
       // timeout: 5000,
     }).then(res => {
@@ -20,7 +20,7 @@ export function request_GET(url, options={}) {
   return new Promise((resolve, reject) => {
     axios({
       method: 'GET',
-      url: 'http://49.234.93.13:8555'+url,
+      url: 'http://localhost:8555'+url,
       params: options,
       // timeout: 5000,
     }).then(res => {

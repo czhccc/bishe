@@ -112,6 +112,7 @@
         toGetGoodsList({
           cut: 'pop'
         }).then(res => {
+          console.log(res)
           this.goodsList = res.data.result
         })
       },

@@ -52,8 +52,8 @@
     },
     data () {
       return {
-        account: '13989536936',
-        password: '123456',
+        account: '',
+        password: '',
         showPassword1: true,
       };
     },

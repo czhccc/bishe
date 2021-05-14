@@ -56,13 +56,16 @@
       // }
     },
     activated() {
-      console.log('ac')
+      let loginPhone = this.$store.getters.getUserPhone
+      if (!loginPhone) {
+        this.$router.push('/login')
+      }
       this.getCollectionList()
     },
     methods: {
       getCollectionList() {
         toGetCollectionList({
-          phone: '13989536936'
+          phone: this.$store.getters.getUserPhone
         }).then(res => {
           console.log(res)
           this.list = res.data.result
