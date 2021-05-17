@@ -3,7 +3,7 @@
     <img v-lazy="goods.images[0].http" alt="" @load="imageLoad">
     <div class="goods-info">
       <p>{{goods.title}}</p>
-      <span class="price">{{goods.amount}}</span>
+      <span class="price">￥{{goods.amount}}</span>
       <span class="collect">{{goods.collection}}</span>
     </div>
   </div>

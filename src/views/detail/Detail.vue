@@ -170,12 +170,9 @@
     },
     watch: {
       '$route' (to, from) {
-        console.log(from)
-        console.log(to.path)
         if(to.path == "/address") {
           return ;
         }
-        console.log(to.path.charAt(to.path.length-1))
         toGetGoodsDetails({
           id: to.path.charAt(to.path.length-1)
         }).then(res => {
@@ -209,10 +206,8 @@
       }
     },
     beforeRouteEnter (to, from, next) {
-      // console.log(from)
       if(from.path == "/address") {
         next(vm => {
-          console.log(vm)
           vm.buyPopupShow = true
           vm.choose_address = vm.$store.getters.getChooseAddress
         })

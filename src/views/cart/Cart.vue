@@ -106,7 +106,7 @@
       }).then(res => {
         console.log(res)
         if (res.data.code == '403') {
-          this.$router.push('/login')
+          // this.$router.push('/login')
         } else if(res.data.result) {
           this.defaultAddress = res.data.result[0]
         }
@@ -170,9 +170,7 @@
     beforeRouteEnter (to, from, next) {
       if(from.path == "/address") {
         next(vm => {
-          console.log(vm)
           vm.choose_address = vm.$store.getters.getChooseAddress
-          console.log('this.choose_address', vm.choose_address)
         })
       }
       next()

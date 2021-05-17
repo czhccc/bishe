@@ -23,7 +23,7 @@
           </div>  
           <div class="cart-list-item" >
             <div>
-              <van-card price="2.00" :title="item.title" :desc="item.title" :thumb="item.http" >
+              <van-card :price="item.amount" :title="item.title" :desc="item.title" :thumb="item.http" >
                 <template #footer>
                   <div class="good-number">×{{item.num}}</div>
                 </template>
@@ -80,7 +80,7 @@
       }).then(res => {
         console.log(res)
         if(res.data.code == '403') {
-          this.$router.push('/login')
+          // this.$router.push('/login')
         } else if (res.data.code == '200') {
           this.list = res.data.result
         }
