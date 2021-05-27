@@ -13,7 +13,6 @@
 
     <div class="content">
       <van-field v-model="account" label="账号" placeholder="请输入账号" />
-      <!-- <van-field v-model="password" type="password" label="密码" placeholder="请输入密码" /> -->
       <van-field v-model="password" :right-icon="showPassword1 ? 'closed-eye' : 'eye'" @click-right-icon="eyeClick1" :type="showPassword1 ? 'password' : 'text'" label="密码" placeholder="请输入密码" />
       <div class="signInButtonWrap">
         <van-button class="signInButton" round type="info" @click="toLogin">
@@ -63,7 +62,6 @@
           phone: this.account,
           password: this.password,
         }).then(res => {
-          console.log(res)
           if (res.data.code == '200') {
             Notify({ type: 'danger', message: '登陆成功' });
             this.$store.commit(types.USER_PHONE, res.data.personInfo.phone)
@@ -79,7 +77,6 @@
         this.$router.push('/signUp')
       },
       forgetPassword() {
-        console.log('忘记密码')
         this.$router.push('/forgetPassword')
       },
       eyeClick1() {

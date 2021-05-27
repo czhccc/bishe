@@ -176,7 +176,6 @@
         toGetGoodsDetails({
           id: to.path.charAt(to.path.length-1)
         }).then(res => {
-          console.log(res)
           if (res.data.result.length != '0') {
             let data = res.data.result
             this.swiperImages = data.images || []
@@ -228,7 +227,6 @@
         phone: this.$store.getters.getUserPhone,
         status: '1'
       }).then(res => {
-        console.log(res)
         if(res.data.code=='200') {
           this.defaultAddress = res.data.result[0]
         }
@@ -336,7 +334,6 @@
           comId: this.iid,
           num: this.goodNumber
         }).then(res => {
-          console.log(res)
           if (res.data.code == '403') {
             this.$router.push('/login')
           } else if (res.data.code == '200') {
@@ -354,7 +351,6 @@
           amount: this.totalGoodPrice,
           address: this.choose_address.id || this.defaultAddress.id
         }).then(res => {
-          console.log(res)
           if(res.data.code=='200') {
             Toast('购买成功');
           } else {

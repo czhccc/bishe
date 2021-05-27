@@ -78,7 +78,6 @@
             receiveMailAccount: this.email,
             isForget: true
           }).then(res => {
-            console.log(res)
           })
         }
       },
@@ -102,7 +101,7 @@
             password: this.password,
             record: this.sms,
           }).then(res => {
-            console.log(res)
+
           })
         }
       },

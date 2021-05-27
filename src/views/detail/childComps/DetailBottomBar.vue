@@ -53,7 +53,6 @@
       },
       onClickIcon3() {
         let userPhone = this.$store.getters.getUserPhone
-        console.log(userPhone)
         if (userPhone == '') {
           this.$router.push('/login')
         } else {
@@ -62,7 +61,6 @@
               phone: userPhone,
               comId: this.iid
             }).then(res => {
-              console.log(res)
               this.isStared = false
               if(res.data.code == '200') {
                 Toast('取消收藏成功')
@@ -75,7 +73,6 @@
               phone: userPhone,
               comId: this.iid
             }).then(res => {
-              console.log(res)
               if(res.data.code == '200') {
                 this.isStared = true
                 Toast('收藏成功')

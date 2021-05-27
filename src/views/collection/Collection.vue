@@ -1,6 +1,5 @@
 <template>
   <div class="collection">
-
     <nav-bar>
       <template v-slot:left>
         <img class="back" src="~assets/img/common/back.svg" @click="backClick" alt="">
@@ -20,7 +19,6 @@
         </div>
       </scroll>
     </div>
-
   </div>
 </template>
 
@@ -49,12 +47,6 @@
         list: [],
       };
     },
-    created() {
-      // let loginPhone = this.$store.getters.getUserPhone
-      // if (!loginPhone) {
-      //   this.$router.replace('/login')
-      // }
-    },
     activated() {
       let loginPhone = this.$store.getters.getUserPhone
       if (!loginPhone) {
@@ -67,7 +59,6 @@
         toGetCollectionList({
           phone: this.$store.getters.getUserPhone
         }).then(res => {
-          console.log(res)
           this.list = res.data.result
         })
       },

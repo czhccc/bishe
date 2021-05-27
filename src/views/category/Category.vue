@@ -65,18 +65,15 @@
         toGetCategoryType({
           id: 0
         }).then(res => {
-          console.log(res)
           this.categories = res.data.result
           toGetCategoryType({
             id: 1
           }).then(res => {
-            console.log(res)
             this.categoriesTypes = res.data.result
             toGetCategoryTypeGoods({
               typeId: '1',
               cut: 'pop'
             }).then(res => {
-              console.log(res)
               this.categoriesGoods = res.data.result
             })
           })
@@ -87,13 +84,11 @@
         toGetCategoryType({
           id: this.categories[this.currentIndex].id
         }).then(res => {
-          console.log(res)
           this.categoriesTypes = res.data.result
           toGetCategoryTypeGoods({
             typeId: this.categories[this.currentIndex].id,
             cut: this.currentType
           }).then(res => {
-            console.log(res)
             this.categoriesGoods = res.data.result
           })
         })
@@ -114,7 +109,6 @@
           typeId: this.categories[this.currentIndex].id,
           cut: this.currentType
         }).then(res => {
-          console.log(res)
           this.categoriesGoods = res.data.result
         })
       },

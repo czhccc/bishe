@@ -85,7 +85,6 @@
         toGetAddressList({
           phone: this.$store.getters.getUserPhone
         }).then(res => {
-          console.log(res)
           if(res.data.code == '403') {
             return ;
           }
@@ -113,7 +112,6 @@
         this.mode = 'add'
       },
       onEdit(item, index) {
-        console.log(item)
         let tempObj = {
           id: item.id,
           name: item.name,
@@ -132,7 +130,6 @@
         this.$router.go(-1)
       },
       onSave(content) {
-        console.log(content)
         this.toEdit = !this.toEdit
         if(this.mode == 'add') {
           toAddAddress({
@@ -141,7 +138,6 @@
             address: content.addressDetail,
             getPhone: content.tel
           }).then(res => {
-            console.log(res)
             this.getAddressList()
           })
         } else {
@@ -153,7 +149,6 @@
             getPhone: content.tel,
             status: content.isDefault ? '1' : '0'
           }).then(res => {
-            console.log(res)
             this.getAddressList()
           })
         }
@@ -163,7 +158,6 @@
           phone: this.$store.getters.getUserPhone,
           id: this.currentAddressId
         }).then(res => {
-          console.log(res)
           if(res.data.code == '200') {
             this.toEdit = !this.toEdit
           }

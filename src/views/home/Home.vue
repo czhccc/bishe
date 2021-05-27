@@ -102,7 +102,6 @@
     methods: {
       getImages() {
         toGetImages().then(res => {
-          console.log(res)
           this.banners = res.data.lun
           this.image1 = res.data.suo[0].http
           this.image2 = res.data.suo[1].http
@@ -112,19 +111,9 @@
         toGetGoodsList({
           cut: 'pop'
         }).then(res => {
-          console.log(res)
           this.goodsList = res.data.result
         })
       },
-      // getGoodsData(type) { // 请求展示的商品的数据
-      //   const page = this.goods[type].page + 1 // 请求下一页的数据，因此先取得下一页的页码
-      //   getHomeGoods(type, page).then(res => { // 发送请求，获取数据
-      //     this.goods[type].list.push(...res.data.list) // 将请求到的数据保存
-      //     this.goods[type].page += 1 // 数据获取完成后，当前的页码需要+1
-
-      //     this.$refs.scroll.finishPullUp() // 完成上拉加载更多后，刷新 better-scroll
-      //   })
-      // },
       /* 监听轮播图的图片加载完成之后，获取 offsetTop，用来计算商品切换栏（tabControl）下拉到什么时候才需要吸顶效果
           接收 HomeSwiper 组件中发出的事件，确保轮播图的图片加载完成后再获取 offsetTop
             因为轮播图的图片比较大，因此，轮播图的图片加载完成时，其他的小图片也应当也已经加载完成，所以只需要监听轮播图的图片加载完成即可 */
@@ -145,7 +134,6 @@
         toGetGoodsList({
           cut: this.goodsType
         }).then(res => {
-          console.log(res)
           this.goodsList = res.data.result
         })
 

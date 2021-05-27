@@ -87,7 +87,6 @@
             receiveMailAccount: this.email,
             isForget: false
           }).then(res => {
-            console.log(res)
           })
         }
       },
@@ -114,7 +113,7 @@
             phone: this.tel,
             record: this.sms
           }).then(res => {
-            console.log(res)
+            
           })
         }
       },

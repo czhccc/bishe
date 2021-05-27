@@ -94,9 +94,7 @@
       
     },
     activated () {
-      console.log('cart actived')
       let loginPhone = this.$store.getters.getUserPhone
-      console.log(loginPhone)
       if (!loginPhone) {
         this.$router.push('/login')
       }
@@ -104,7 +102,6 @@
         phone: this.$store.getters.getUserPhone,
         status: '1'
       }).then(res => {
-        console.log(res)
         if (res.data.code == '403') {
           // this.$router.push('/login')
         } else if(res.data.result) {
@@ -180,7 +177,6 @@
         toSelectCart({
           phone: this.$store.getters.getUserPhone
         }).then(res => {
-          console.log(res)
           if(res.data.result) {
             this.goodsNumber = res.data.result.length || 0
             let tempArr = []
@@ -216,7 +212,6 @@
           amount: 0,
           address: this.choose_address.id || this.defaultAddress.id,
         }).then(res => {
-          console.log(res)
           if(res.data.code == '200') {
             Toast('购买成功')
             this.isLoading = false
@@ -243,7 +238,6 @@
             })
           }).catch(err => {
             this.selectCart()
-            console.log(err)
           })
         } else {
           toSubCartNumber({

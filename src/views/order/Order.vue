@@ -12,7 +12,6 @@
 
     <div class="cart-list">
       <scroll class="content" ref="scroll">
-        <!-- <div class="cart-list-item" v-for="(item, index) in goodsList" :key="index"> -->
         <div v-for="(item, index) in list" :key="index">
           <div class="address">
             <div class="address-icon"><van-icon name="location-o" /></div>
@@ -31,7 +30,6 @@
             </div>
           </div>
         </div>
-
       </scroll>
     </div>
 
@@ -67,9 +65,6 @@
         number: 2
       };
     },
-    created() {
-      
-    },
     activated() {
       let loginPhone = this.$store.getters.getUserPhone
       if (!loginPhone) {
@@ -78,7 +73,6 @@
       toGetOrderList({
         phone: this.$store.getters.getUserPhone
       }).then(res => {
-        console.log(res)
         if(res.data.code == '403') {
           // this.$router.push('/login')
         } else if (res.data.code == '200') {
